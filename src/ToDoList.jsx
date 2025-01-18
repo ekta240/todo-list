@@ -1,7 +1,11 @@
 import React,{useState} from "react"
 
 function ToDoList(){
-    const [tasks,setTasks] = useState(["Eat breakfast","Walk dog","Clean Room"]);
+    const [tasks,setTasks] = useState([
+        {name : "Eat breakfast", completed: false},
+        {name : "Walk dog", completed: false},
+        {name : "Clean room", completed: false},
+    ]);
     const [newTask,setNewTask] = useState("");
 
     function handleInputChange(event){
@@ -10,7 +14,7 @@ function ToDoList(){
 
     function addTask(){
         if(newTask.trim() !== ""){
-            setTasks(t=> [...t,newTask]);
+            setTasks((currentTasks) => [...currentTasks,{name : newTask, completed: false},]);
             setNewTask("");
         }
         
@@ -39,6 +43,12 @@ function ToDoList(){
         }
     }
 
+    function toggleTaskCompletion(index) {
+        const updatedTasks = tasks.map((task, i) =>
+            i === index ? { ...task, completed: !task.completed } : task
+        );
+        setTasks(updatedTasks);
+    }
 
     return(
         <div className="to-do-list">
@@ -57,7 +67,17 @@ function ToDoList(){
             <ol>
                 {tasks.map((task,index)=>
                 <li key={index}>
-                    <span className="text">{task}</span>
+                    <input 
+                     type="checkbox" 
+                     checked={task.completed} 
+                     onChange={() => toggleTaskCompletion(index)}
+                     />
+                    <span 
+                        className="text" style={{
+                        textDecoration: task.completed ? "line-through" : "none",}}
+                    >
+                        {task.name}
+                    </span>
                     <button 
                     className="delete-button"
                     onClick={() => deleteTask(index)}>
@@ -70,13 +90,12 @@ function ToDoList(){
                     </button>
                     <button 
                     className="move-button"
-                    onClick={() => moveTaskUp(index)}>
-                        👎👎
+                    onClick={() => moveTaskDown(index)}>
+                        👇👇
                     </button>
                 </li>
                 )}
             </ol>
-
         </div>
     );
     

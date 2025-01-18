@@ -48,6 +48,12 @@ input[type="text"]{
     color: black;
 }
 
+input[type="checkbox"]{
+    width: 20px;
+    height: 20px;
+}
+
+
 ol{
     padding: 0;
 }
